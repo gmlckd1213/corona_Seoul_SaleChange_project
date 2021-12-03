@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+    flask:
+        build: ./flask
+        container_name: flask
+        restart: always
+        environment:
+            - APP_NAME=FlaskTest
+        volumes:
+          - ./flask:/app
+        # depends_on:
+        #     - db
+    
+    nginx:
+        build: ./nginx
+        container_name: nginx
+        restart: always
+        ports:
+            - "80:80"
+    mariadb:
+        image: mariadb
+        platform: linux/x86_64
+        container_name: db
+        restart: always
+        environment:
+            TZ: Asia/Seoul
+        volumes:
+            - ./mariadb/data:/var/lib/mysql
+            - ./mariadb/conf.d:/etc/mysql/conf.d
+            - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
+        env_file: .env
+        ports:
+          - "3306:3306"
+        # healthcheck:
+        #     test: mysqladmin -p${MYSQL_ROOT_PASSWORD} ping -h localhost
+        #     interval: 20s
+        #     start_period: 10s
+        #     timeout: 10s
+        #     retries: 3
+
+        healthcheck:
+            test: mysqladmin -p${MYSQL_ROOT_PASSWORD} ping -h localhost
+            timeout: 10s
+            retries: 4

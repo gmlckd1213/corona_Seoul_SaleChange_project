@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>서울시 매출추이</title>
+  <link rel="shortcut icon" type="image/x-icon" href="static/img/favicon.ico" />
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="intro">
+      <div class="fullBackground">
+          <div class="overlay">
+              <div class="textWrap">
+                <h1>서울시 매출추이</h1>
+                <a>2019 ~ 2021</a><br><br>
+
+                <!--  _blank는 새로운 페이지에서 열리므로 추후에 수정정     -->
+                <img class="map" src="static/img/seoul.png" id="seoul" usemap="#seoul-map">
+                <map name="seoul-map">
+                    <area onclick="clickFunc('강서구')" target="_blank" name="강서구" title="강서구" href="" coords="153,250,82,358,156,407,207,406,311,359" shape="poly">
+
+                    <area onclick="clickFunc('양천구')" target="_blank" name="양천구" title="양천구" href="" coords="209,411,197,435,195,475,301,471,318,366" shape="poly">
+
+                    <area onclick="clickFunc('구로구')" target="_blank" name="구로구" title="구로구" href="" coords="194,482,302,479,283,538,263,537,251,586,194,580" shape="poly">
+
+                    <area onclick="clickFunc('영등포구')" target="_blank" name="영등포구" title="영등포구" href="" coords="321,368,378,408,383,469,389,481,347,545,290,537,310,476" shape="poly">
+
+                    <area onclick="clickFunc('금천구')" target="_blank" name="금천구" title="금천구" href="" coords="292,548,347,550,381,652,382,673,341,673" shape="poly">
+
+                    <area onclick="clickFunc('동작구')" target="_blank" name="동작구" title="동작구" href="" coords="402,473,457,465,471,476,494,541,356,543" shape="poly">
+
+                    <area onclick="clickFunc('관악구')" target="_blank" name="관악구" title="관악구" href="" coords="355,549,495,550,520,620,452,672,423,673,422,649,389,649" shape="poly">
+
+                    <area onclick="clickFunc('서초구')" target="_blank" name="서초구" title="서초구" href="" coords="482,486,501,498,551,463,611,584,668,588,708,631,707,659,649,695,599,676,590,607,563,634,530,635" shape="poly">
+
+                    <area onclick="clickFunc('강남구')" target="_blank" name="강남구" title="강남구" href="" coords="559,461,599,435,642,448,765,619,715,627,671,581,619,580" shape="poly">
+
+                    <area onclick="clickFunc('송파구')" target="_blank" name="송파구" title="송파구" href="" coords="661,456,705,472,744,411,794,500,837,528,771,618" shape="poly">
+
+                    <area onclick="clickFunc('강동구')" target="_blank" name="강동구" title="강동구" href="" coords="751,403,767,380,881,331,883,411,818,441,799,490" shape="poly">
+
+                    <area onclick="clickFunc('은평구')" target="_blank" name="은평구" title="은평구" href="" coords="357,130,438,99,478,138,478,168,445,240,356,303,320,269,358,268" shape="poly">
+
+                    <area onclick="clickFunc('마포구')" target="_blank" name="마포구" title="마포구" href="" coords="308,272,279,300,434,416,461,377,455,359,412,362" shape="poly">
+
+                    <area onclick="clickFunc('중구')" target="_blank" name="중구" title="중구" href="" coords="460,355,467,375,548,385,571,324" shape="poly">
+
+                    <area onclick="clickFunc('용산구')" target="_blank" name="용산구" title="용산구" href="" coords="468,382,440,419,500,464,555,428,549,393" shape="poly">
+
+                    <area onclick="clickFunc('서대문구')" target="_blank" name="서대문구" title="서대문구" href="" coords="362,310,446,247,454,351,415,355" shape="poly">
+
+                    <area onclick="clickFunc('종로구')" target="_blank" name="종로구" title="종로구" href="" coords="480,177,452,242,459,346,568,317,548,315,530,277,502,271,495,253,507,241" shape="poly">
+
+                    <area onclick="clickFunc('성북구')" target="_blank" name="성북구" title="성북구" href="" coords="485,171,500,166,579,241,630,204,646,219,648,247,578,311,554,309,537,275,507,267,501,255,514,242" shape="poly">
+
+                    <area onclick="clickFunc('동대문구')" target="_blank" name="동대문구" title="동대문구" href="" coords="586,316,649,256,664,251,674,317,662,356" shape="poly">
+
+                    <area onclick="clickFunc('성동구')" target="_blank" name="성동구" title="성동구" href="" coords="578,320,555,388,560,424,594,403,644,419,660,362" shape="poly">
+
+                    <area onclick="clickFunc('광진구')" target="_blank" name="광진구" title="광진구" href="" coords="680,318,651,425,693,439,741,368,723,361,724,317" shape="poly">
+
+                    <area onclick="clickFunc('중랑구')" target="_blank" name="중랑구" title="중랑구" href="" coords="654,224,655,244,667,242,679,313,724,312,756,302,754,217,736,211" shape="poly">
+
+                    <area onclick="clickFunc('노원구')" target="_blank" name="노원구" title="노원구" href="" coords="643,27,619,180,648,218,734,204,734,190,748,183,748,146,716,137,713,100,725,90,722,71,734,61,732,35,675,6,664,28" shape="poly">
+
+                    <area onclick="clickFunc('강북구')" target="_blank" name="강북구" title="강북구" href="" coords="505,61,504,160,578,232,626,198,577,130,551,43" shape="poly">
+
+                    <area onclick="clickFunc('도봉구')" target="_blank" name="도봉구" title="도봉구" href="" coords="558,6,552,37,582,127,616,176,637,31,605,28,598,6" shape="poly">
+                </map>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <script type="text/javascript" src="static/js/jquery.js"></script>
+  <script type="text/javascript" src="static/js/fullclip.js"></script>
+  <script type="text/javascript" src="static/js/jquery.maphilight.js"></script>
+  <script type="text/javascript">
+    $('.fullBackground').fullClip({
+        images: ['static/img/img1.jpg', 'static/img/img2.jpg', 'static/img/img3.jpg'],
+        transitionTime: 1000,
+        wait:3000
+    })
+
+    $(function() {
+      $('.map').maphilight();
+    });
+
+    function clickFunc(name) {
+      //alert(`http://localhost:5000?data=${name}`)
+  
+      location.href=`http://localhost/get?data=${name}`
+    }
+  </script>
+</body>
+</html>

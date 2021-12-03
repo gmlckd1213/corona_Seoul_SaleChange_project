@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" type="image/x-icon" href="static/img/favicon.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>서울시 {{ quarter }} 데이터</title>
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gugi&family=Noto+Sans+KR:wght@300&display=swap"
+        rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Gugi&family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@300&display=swap"
+        rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet"> -->
+</head>
+
+<body>
+    <header id="header">
+        <div class="menu">
+            <img src="static\img\menu.png" alt="">
+        </div>
+        <div class="text_wrap">
+            <h2>서울시 {{ quarter }} 상권분석</h2>
+        </div>
+        <div class="logo">
+            <img onclick="homeFunc()" src="static/img/home.png">
+        </div>
+    </header>
+
+    <nav id="side_nav">
+        <div class="close">
+            <span class="close_btn">X</span>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <ul id="ul" style="height:800px; overflow-y:auto">
+            <li><a href="#" onclick="clickFunc('강남구')">강남구</a></li>
+            <li><a href="#" onclick="clickFunc('강동구')">강동구</a></li>
+            <li><a href="#" onclick="clickFunc('강서구')">강서구</a></li>
+            <li><a href="#" onclick="clickFunc('강북구')">강북구</a></li>
+            <li><a href="#" onclick="clickFunc('구로구')">구로구</a></li>
+            <li><a href="#" onclick="clickFunc('금천구')">금천구</a></li>
+            <li><a href="#" onclick="clickFunc('관악구')">관악구</a></li>
+            <li><a href="#" onclick="clickFunc('광진구')">광진구</a></li>
+            <li><a href="#" onclick="clickFunc('노원구')">노원구</a></li>
+            <li><a href="#" onclick="clickFunc('도봉구')">도봉구</a></li>
+            <li><a href="#" onclick="clickFunc('동대문구')">동대문구</a></li>
+            <li><a href="#" onclick="clickFunc('동작구')">동작구</a></li>
+            <li><a href="#" onclick="clickFunc('마포구')">마포구</a></li>
+            <li><a href="#" onclick="clickFunc('서대문구')">서대문구</a></li>
+            <li><a href="#" onclick="clickFunc('서초구')">서초구</a></li>
+            <li><a href="#" onclick="clickFunc('송파구')">송파구</a></li>
+            <li><a href="#" onclick="clickFunc('성북구')">성북구</a></li>
+            <li><a href="#" onclick="clickFunc('성동구')">성동구</a></li>
+            <li><a href="#" onclick="clickFunc('양천구')">양천구</a></li>
+            <li><a href="#" onclick="clickFunc('영등포구')">영등포구</a></li>
+            <li><a href="#" onclick="clickFunc('용산구')">용산구</a></li>
+            <li><a href="#" onclick="clickFunc('은평구')">은평구</a></li>
+            <li><a href="#" onclick="clickFunc('중구')">중구</a></li>
+            <li><a href="#" onclick="clickFunc('종로구')">종로구</a></li>
+            <li><a href="#" onclick="clickFunc('중랑구')">중랑구</a></li>
+        </ul>
+    </nav>
+
+
+
+
+    <div id='map'>
+        <iframe id='frame'></iframe>
+    </div>
+
+    <hr>
+
+    <div id='main'>
+        <select id="comp" class="select" onchange="select()">
+            {% for com in com_list %}
+            <option>{{ com }}</option>
+            {% endfor %}
+            <option id="quarter" hidden>{{ quarter }}</option>
+
+        </select>
+        <select id="day" class="select" onchange="selectweek()">
+            <option value="none">요일 선택</option>
+            <option value=monday>월요일</option>
+            <option value=tuesday>화요일</option>
+            <option value=wednesday>수요일</option>
+            <option value=thursday>목요일</option>
+            <option value=friday>금요일</option>
+            <option value=saturday>토요일</option>
+            <option value=sunday>일요일</option>
+            <option id="quarter" hidden>{{ quarter }}</option>
+            <option id="quarter" hidden>{{ comp }}</option>
+        </select>
+    </div>
+
+    <div id='ranking' style="text-align: center;"> </div>
+    <br>
+    <div class='container'>
+        <div class="data-container" id="data-container">
+            <canvas id="coronaChart"></canvas>
+        </div>
+        <br>
+        <div class="data-container">
+            <canvas id='weekChart'></canvas>
+        </div>
+
+    </div>
+    <div id="hrtag">
+        <hr>
+    </div>
+
+
+    <!-- 워드 클라우드 생성 -->
+    <div class='chart-area' id='chart-area'
+        style="position:relative; width: 80vw; height: 70vh; margin: 0 auto; border: 1px solid #ffffff;">
+        <br>
+        <div id='left-chart'
+            style="position:relative; width: 80vw; height:25vh; box-sizing: border-box; display: block;"></div>
+        <br>
+        <div id='right-chart'
+            style="position:relative; width: 80vw; height: 25vh; box-sizing: border-box; display: block;"></div>
+        <br>
+        <div>
+            <table id='corr-table'
+                style="width: 70%; border-top: 1px solid #ADADAD; border-collapse: collapse;  color: #6E6E6E; text-align: center; margin: auto; font-size: medium;">
+                <thead>
+                    <tr>
+                        <th>상관계수</th>
+                        <th>상관관계 정도</th>
+                    </tr>
+                </thead>
+                <tbody style="border-bottom: 1px solid #ADADAD; padding: 10px;">
+                    <tr>
+                        <td>±.2 미만</td>
+                        <td>상관관계가 거의 없음</td>
+                    </tr>
+                    <tr>
+                        <td>±.2 ~ .4 미만</td>
+                        <td>낮은 상관관계가 있음</td>
+                    </tr>
+                    <tr>
+                        <td>±.4 ~ .7 미만</td>
+                        <td>다소 높은 상관관계가 있음</td>
+                    </tr>
+                    <tr>
+                        <td>± .7 ~ .9 미만</td>
+                        <td>높은 상관관계가 있음</td>
+                    </tr>
+                    <tr>
+                        <td>±.9 이상</td>
+                        <td>아주 높은 상관관계가 있음</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <br>
+        </div>
+
+
+
+    <footer id="footer">
+        <div class="img-logo">
+            <img src="static/img/logo.png" alt="이어드림">
+        </div>
+    </footer>
+
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/index.js')}}"></script>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/nav.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+        </script>
+    <!-- 워드 클라우드 호출 -->
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+    <script src="https://cdn.anychart.com/locale/2.0.1/ko-kr.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+    <script src="static/js/wordcloud.js"></script>
+    <script src="static/js/ranking_guide.js"></script>
+
+    <script type="text/javascript">
+
+        var coronaChart;
+        var wordcloud1;
+        var wordcloud2;
+        var quarter = document.getElementById('quarter');
+
+        //click quarter on nav
+        function clickFunc(name) {
+            location.href = `http://localhost/get?data=${name}`
+        }
+
+        //click home button
+        function homeFunc() {
+            location.href = `http://localhost`
+        }
+
+        //onchange
+        function select() {
+            var quarter = document.getElementById('quarter');
+            var upjong = document.getElementById('comp');
+            upjong = upjong.options[upjong.selectedIndex];
+            refresh(quarter.text, upjong.text)
+
+            ranking(quarter.text, upjong.text)
+
+            // let wordcloud1 = document.getElementById('left-chart');
+            // let wordcloud2 = document.getElementById('right-chart');
+            // wordcloud1.style.display = "none";
+            // wordcloud2.style.display = "none";
+        }
+
+        //onchange
+        function selectweek() {
+            var quarter = document.getElementById('quarter');
+            var upjong = document.getElementById('comp');
+            upjong = upjong.options[upjong.selectedIndex];
+            var day = document.getElementById('day');
+            day = day.options[day.selectedIndex];
+            refresh2(quarter.text, upjong.text, day.text)
+        }
+
+        window.onload = function () {
+
+            document.getElementById('frame').src = "/static/" + quarter.text + ".html";
+
+            wordcloud(quarter.text);
+
+            var ctx = document.getElementById('coronaChart').getContext('2d');
+            $("#day").attr('disabled', true);
+
+            var config = {
+                type: 'bar',
+                data: {
+                    labels: [
+                        '19-1',
+                        '19-2',
+                        '19-3',
+                        '19-4',
+                        '20-1',
+                        '20-2',
+                        '20-3',
+                        '20-4',
+                        '21-1',
+                        '21-2'
+                    ],
+                    datasets: [{
+                        type: 'line',
+                        label: '분기별 코로나 확진자 수',
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 0.7)',
+                        yAxisID: 'A',
+                        fill: false,
+                        data:
+                            []
+                        ,
+                    }, {
+                        type: 'bar',
+                        label: ' 분기별 매출금액',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        yAxisID: 'B',
+                        fill: false,
+                        data:
+                            []
+                        ,
+                    }, {
+                        type: 'bar',
+                        label: '분기별 점포 수',
+                        backgroundColor: 'rgba(171, 206, 241, 0.5)',
+                        borderColor: 'rgba(171, 206, 241, 1)',
+                        fill: false,
+                        yAxisID: 'C',
+
+                        data: []
+                    }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    title: {
+                        text: 'Chart.js Time Scale'
+                    },
+                    scales: {
+                        yAxes: [{
+                            id: 'A',
+                            type: 'linear',
+
+                            position: 'left',
+                        }, {
+                            id: 'B',
+                            type: 'linear',
+                            position: 'right'
+                        }, {
+                            id: 'C',
+                            type: 'linear',
+                            position: 'right',
+                            ticks: {
+                                min: 0
+                            }
+                        }
+                        ]
+                    }
+                }
+                ,
+            };
+            //차트그리기
+            coronaChart = new Chart(ctx, config);
+            var ctx2 = document.getElementById('weekChart').getContext('2d');
+
+
+            var config2 = {
+                type: 'bar',
+                data: {
+                    labels: [
+                        '19-1',
+                        '19-2',
+                        '19-3',
+                        '19-4',
+                        '20-1',
+                        '20-2',
+                        '20-3',
+                        '20-4',
+                        '21-1',
+                        '21-2'
+                    ],
+                    datasets: [{
+                        type: 'line',
+                        label: '분기별 코로나 확진자 수',
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        yAxisID: 'A',
+                        fill: false,
+                        data:
+                            []
+                        ,
+                    }, {
+                        type: 'bar',
+                        label: '요일별 매출건수',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        yAxisID: 'B',
+                        fill: false,
+                        data:
+                            []
+                        ,
+                    },
+
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    title: {
+                        text: '요일별 매출 건수'
+                    },
+                    scales: {
+                        yAxes: [{
+                            id: 'A',
+                            type: 'linear',
+
+                            position: 'left',
+                        }, {
+                            id: 'B',
+                            type: 'linear',
+                            position: 'right',
+                            // ticks : {
+                            //     min:0
+                            // }
+                        }]
+                    }
+                }
+                ,
+            };
+            //차트그리기
+            window.weekChart = new Chart(ctx2, config2);
+
+
+        }
+
+    </script>
+
+    <script>
+
+
+    </script>
+</body>
+
+</html>
